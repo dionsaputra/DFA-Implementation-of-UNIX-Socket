@@ -1,16 +1,23 @@
 package dfa
 
 type DFA struct {
-	States  map[string]bool
-	Start   string
-	Symbols map[string]bool
+	States      map[string]bool
+	Start       string
+	Symbols     map[string]bool
+	Transitions map[TransitionInput]string
 }
 
-func NewDFA() DFA {
-	return DFA{
-		States:  make(map[string]bool),
-		Start:   "",
-		Symbols: make(map[string]bool),
+type TransitionInput struct {
+	Source string
+	Symbol string
+}
+
+func NewDFA() *DFA {
+	return &DFA{
+		States:      make(map[string]bool),
+		Start:       "",
+		Symbols:     make(map[string]bool),
+		Transitions: make(map[TransitionInput]string),
 	}
 }
 
@@ -31,4 +38,33 @@ func (dfa *DFA) SetSymbols(symbols ...string) *DFA {
 		dfa.Symbols[symbol] = true
 	}
 	return dfa
+}
+
+func (dfa *DFA) AddTransition(symbol string, source string, destination string) *DFA {
+	if _, ok := dfa.Symbols[symbol]; !ok {
+		return dfa
+	}
+	if _, ok := dfa.States[source]; !ok {
+		return dfa
+	}
+	if _, ok := dfa.States[destination]; !ok {
+		return dfa
+	}
+	dfa.Transitions[TransitionInput{Source: source, Symbol: symbol}] = destination
+	return dfa
+}
+
+func (dfa *DFA) Verify(inputs ...string) bool {
+	lastState := dfa.Start
+	for _, input := range inputs {
+		transitionInput := TransitionInput{
+			Source: lastState,
+			Symbol: input,
+		}
+		if val, ok := dfa.Transitions[transitionInput]; ok {
+			lastState = val
+		}
+	}
+
+	return dfa.States[lastState]
 }
