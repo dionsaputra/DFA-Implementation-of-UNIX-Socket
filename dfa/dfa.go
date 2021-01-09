@@ -63,6 +63,8 @@ func (dfa *DFA) Verify(inputs ...string) bool {
 		}
 		if val, ok := dfa.Transitions[transitionInput]; ok {
 			lastState = val
+		} else {
+			return false
 		}
 	}
 

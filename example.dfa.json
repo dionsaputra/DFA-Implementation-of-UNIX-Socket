@@ -1,0 +1,38 @@
+{
+  "start": "s1",
+  "states": [
+    {
+      "name": "s1",
+      "is_final": false
+    },
+    {
+      "name": "s2",
+      "is_final": false
+    },
+    {
+      "name": "s3",
+      "is_final": true
+    }
+  ],
+  "symbols": [
+    "a",
+    "b"
+  ],
+  "transitions": [
+    {
+      "symbol": "a",
+      "source": "s1",
+      "destination": "s2"
+    },
+    {
+      "symbol": "b",
+      "source": "s2",
+      "destination": "s3"
+    },
+    {
+      "symbol": "b",
+      "source": "s1",
+      "destination": "s3"
+    }
+  ]
+}
